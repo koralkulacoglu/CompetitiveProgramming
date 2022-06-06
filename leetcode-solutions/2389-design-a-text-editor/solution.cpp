@@ -1,23 +1,22 @@
 class TextEditor {
-    int idx;
-    string words;
-    
-    public:
+    string s;
+    int pos ;
+public:
     TextEditor() {
-        idx = 0;
-        words = "";
+        pos = 0;
     }
     
     void addText(string text) {
-        words.insert(idx, text);
-        idx += text.size();
+        s.insert(pos, text);
+        pos += text.size();
+        // cout << "add" << endl;
     }
     
     int deleteText(int k) {
         int ans = 0;
-        while (idx != 0 && ans < k) {
-            words.erase(idx-1, 1);
-            --idx;
+        while (pos != 0 && ans < k) {
+            s.erase(pos-1, 1);
+            --pos;
             ++ans;
         }
         // cout << "delet" << endl;
@@ -25,13 +24,19 @@ class TextEditor {
     }
     
     string cursorLeft(int k) {
-        idx = max(0, idx-k);
-        return words.substr(max(0, idx-min(10, idx)), min(10, idx));
+        // cout << "r" << endl;
+        pos = max(pos-k, 0);
+        string res;
+        for (int i = pos-10; i < pos; ++i) if (i >= 0) res += s[i];
+        return res;
     }
     
     string cursorRight(int k) {
-        idx = min((int)words.size(), idx+k);
-        return words.substr(max(0, idx-min(10, idx)), min(10, idx));
+        // cout << "R" << endl;
+        pos = min(pos+k, int(s.size()));
+        string res;
+        for (int i = pos-10; i < pos; ++i) if (i >= 0) res += s[i];
+        return res;
     }
 };
 
@@ -43,3 +48,4 @@ class TextEditor {
  * string param_3 = obj->cursorLeft(k);
  * string param_4 = obj->cursorRight(k);
  */
+
