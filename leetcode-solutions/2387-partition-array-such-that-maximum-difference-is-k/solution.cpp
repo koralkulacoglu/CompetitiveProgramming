@@ -1,15 +1,15 @@
 class Solution {
 public:
     int partitionArray(vector<int>& nums, int k) {
-        int n=nums.size(), ans=1;
         sort(nums.begin(), nums.end());
-        int mx=0, mn=1e9;
-        for (int i=0; i<n; i++) {
-            mx = max(mx, nums[i]);
-            mn = min(mn, nums[i]);
-            if (mx - mn > k) {
-                mx=nums[i]; mn=nums[i];
+        int n=nums.size(), mx=0, mn=1e9, ans=1;
+        for (int &i : nums) {
+            mx = max(mx, i);
+            mn = min(mn, i);
+            if (mx-mn > k) {
                 ans++;
+                mn = i;
+                mx = i;
             }
         }
         return ans;
