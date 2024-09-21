@@ -1,18 +1,24 @@
 class Solution {
 public:
     bool wordBreak(string s, vector<string>& wordDict) {
-        map<string, bool> seen;
-        for (string i : wordDict) seen[i] = true;
         int n = s.size();
-        vector<bool> dp(n, 0);
+        int m = wordDict.size();
+        map<string, bool> words;
+        for (string i : wordDict) words[i] = true;
+        
+        string word;
+        vector<bool> dp(n, false);
         for (int i=0; i<n; i++) {
-            if (i != 0 && dp[i-1] != 1) continue;
-            string cur;
-            for (int j=i; j<n; j++) {
-                cur += s[j];
-                if (seen[cur]) dp[j] = true;
+            for (int j=0; j<=i; j++) {
+                if (dp[j]) word = s.substr(j+1, i-j);
+                else word = s.substr(0, i+1);
+                if (words[word]) {
+                    dp[i] = true;
+                    break;
+                }
             }
         }
+
         return dp[n-1];
     }
 };
