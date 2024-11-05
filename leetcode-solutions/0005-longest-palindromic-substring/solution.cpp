@@ -1,22 +1,26 @@
 class Solution {
 public:
-    string max(string& s1, string s2){
-        return s1.size()>s2.size()?s1:s2;
-    }
-    
-    string solve(string& s, int i, int j){
-        while(i>=0 && j<s.size() && s[i] == s[j]){
-            i--; j++;
-        }
-        return s.substr(i+1, j-i-1);
-    }
-    
     string longestPalindrome(string s) {
-        string res = "";
-        for(int i=0; i<s.size(); i++){
-            res = max(res, solve(s, i-1, i+1));
-            res = max(res, solve(s, i, i+1));
+        int n = s.size();
+        vector<vector<bool>> dp(n, vector<bool>(n, false));
+        for (int i=0; i<n; i++) dp[i][i] = true;
+
+        int start = 0, maxLen = 1;
+        for (int length = 2; length <= n; length++) {
+            for (int i = 0; i <= n - length; i++) {
+                int j = i + length - 1;
+                if (s[i] == s[j]) {
+                    if (length == 2 || dp[i+1][j-1]) {
+                        dp[i][j] = true;
+                        if (length > maxLen) {
+                            start = i;
+                            maxLen = length;
+                        }
+                    }
+                }
+            }
         }
-        return res;
+
+        return s.substr(start, maxLen);
     }
 };
