@@ -10,7 +10,6 @@ class Spreadsheet:
 
     def getValue(self, formula: str) -> int:
         return sum([(int(x) if x.isdigit() else (self.mp[x] if x in self.mp else 0)) for x in formula[1:].split('+')])
-        
 
 
 # Your Spreadsheet object will be instantiated and called as such:
@@ -18,3 +17,5 @@ class Spreadsheet:
 # obj.setCell(cell,value)
 # obj.resetCell(cell)
 # param_3 = obj.getValue(formula)
+
+
