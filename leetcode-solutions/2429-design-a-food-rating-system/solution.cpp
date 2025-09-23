@@ -5,11 +5,12 @@ class FoodRatings {
         }
         return a;
     }
-    
-    public:
+
     unordered_map<string, pair<int, string>> value;
     unordered_map<string, set<pair<int, string>>> menu;
     unordered_map<string, string> categories;
+    
+    public:
     FoodRatings(vector<string>& foods, vector<string>& cuisines, vector<int>& ratings) {
         for (int i=0; i<foods.size(); i++) {
             string val = convert(foods[i]);
