@@ -1,7 +1,7 @@
 class MovieRentingSystem {
-    unordered_map<int, set<pair<int, int>>> unrentedMovieMap; // movie -> {price, shop}, ... 
+    unordered_map<int, set<pair<int, int>>> unrentedMovieMap; // movie -> {{price, shop}, ...}
     map<pair<int, int>, pair<int, int>> movieShopMap; // {movie, shop} -> {rented, price}
-    set<vector<int>> rentedSet; // {price, shop, movie}
+    set<vector<int>> rentedSet; // {{price, shop, movie}, ...}
 
 public:
     MovieRentingSystem(int n, vector<vector<int>>& entries) {
