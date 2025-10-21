@@ -1,24 +1,31 @@
-vector<int> parent(1e5), size(1e5);
+#include <vector>
 
-void make_set(int v) {
-    parent[v] = v;
-    size[v] = 1;
-}
+using namespace std;
 
-int find_set(int v) {
-    if (v == parent[v])
-        return v;
-    return parent[v] = find_set(parent[v]);
-}
+struct DSU {
+	vector<int> parents, sizes;
 
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) {
-        if (size[a] < size[b])
-            swap(a, b);
-        parent[b] = a;
-        size[a] += size[b];
-    }
-}
+	DSU(int n=2e5) : parents(n), sizes(n, 1) {
+		for (int i=0; i<n; i++) parents[i] = i;
+	}
 
+	int find(int x) {
+		return parents[x] == x ? x : (parents[x] = find(parents[x]));
+	}
+
+	bool unite(int x, int y) {
+		int x_root = find(x);
+		int y_root = find(y);
+		if (x_root == y_root) return false;
+
+		if (sizes[x_root] < sizes[y_root]) swap(x_root, y_root);
+		sizes[x_root] += sizes[y_root];
+		parents[y_root] = x_root;
+
+		return true;
+	}
+
+	bool connected(int x, int y) {
+		return find(x) == find(y);
+	}
+};
