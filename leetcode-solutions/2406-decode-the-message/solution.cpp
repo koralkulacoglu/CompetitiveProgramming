@@ -1,19 +1,21 @@
 class Solution {
 public:
     string decodeMessage(string key, string message) {
-        unordered_map<char, bool> vis;
-        unordered_map<char, char> p;
-        char cur='a';
-        for (int i : key) {
-            if (vis[i] || i == ' ') continue;
-            p[i] = cur;
+        unordered_map<char, char> mp;
+        mp[' '] = ' ';
+        char cur = 'a';
+        for (char c : key) {
+            if (mp.find(c) != mp.end()) continue;
+            mp[c] = cur;
             cur++;
-            vis[i] = true;
+            if (cur > 'z') break;
         }
-        for (int i=0; i<message.size(); i++) {
-            if (message[i] == ' ') continue;
-            message[i] = p[message[i]];
+
+        int n = message.size();
+        for (int i=0; i<n; i++) {
+            message[i] = mp[message[i]];
         }
+
         return message;
     }
 };
