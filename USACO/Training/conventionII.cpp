@@ -97,28 +97,37 @@ struct custom_hash {
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-// idea: dp[i][j] = value you can get if its possible to merge a[i..j] into a single value
  
 void solve() {
+	ofstream cout ("convention2.out");
+	ifstream cin ("convention2.in");
+
 	int n; cin >> n;
-	vi a(n); FOR (i, 0, n) cin >> a[i];
+	vector<vi> a(n, vi(3));
+	FOR (i, 0, n) {
+		cin >> a[i][0] >> a[i][2];
+		a[i][1] = i;
+	}
 
-	vector<vi> dp(n, vi(n, 0));
-	FOR (i, 0, n) dp[i][i] = a[i];
+	sort(a.begin(), a.end());
 
-	int ans = 0;
-	FOR (s, 1, n) {
-		FOR (l, 0, n) {
-			int r = l + s;
-			if (dp[l][r-1] == a[r]) dp[l][r] = dp[l][r-1] + 1;
-			FOR (m, l, n-s) {
-				if (m+1 <= r && dp[l][m] == dp[m+1][r] && dp[l][m] + 1 == dp[l][r-1]) {
-					ckmax(dp[l][r], dp[l][m] + 2);
-				}
-			}
-			ckmax(ans, dp[l][r]);
-			dbg(dp[l][r], l, r);
+	priority_queue<pi, vector<pi>, greater<pi>> pq; // seniority, index
+
+	int ans = 0, i = 0, t = 0; // latest end time
+	while (i < n || !pq.empty()) {
+		if (i < n && a[i][0] <= t) {
+			pq.push({a[i][1], i});
+			i++;
+		}
+		else if (pq.empty()) {
+			t = a[i][0] + a[i][2];
+			i++;
+		}
+		else {
+			pi p = pq.top();
+			ckmax(ans, t - a[p.sec][0]);
+			t += a[p.sec][2];
+			pq.pop();
 		}
 	}
 
