@@ -5,6 +5,7 @@ LANG: C++
 */
 
 #pragma GCC optimize ("O3")
+#pragma GCC target ("sse4")
  
 #include <bits/stdc++.h>
  
@@ -97,28 +98,40 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-// the person that has the last switch wins or ties
- 
+// Bob can cancel all of Alice's moves except for 1
+// at each turn Bob must choose to revert either Alice's last move or fix a worse subarray
+// Alice knows this
+// Alice can ignore specific ranges since they are not profitable
+// idea: assume Bob always cancel's Alice's last move
+// idea: dp
+
 void solve() {
-	int n; cin >> n;
-	vi a(n); FOR (i, 0, n) cin >> a[i];
-	vi b(n); FOR (i, 0, n) cin >> b[i];
+	int n, k; cin >> n >> k;
+	vll a(n); FOR (i, 0, n) cin >> a[i];
+	vll b(n); FOR (i, 0, n) cin >> b[i];
 
-	int aOnes = accumulate(all(a), 0);
-	int bOnes = accumulate(all(b), 0);
+	vpll dp(n, {-1e18, -1e18}); // unused, used
+	dp[0].fir = a[0];
+	if (k%2) dp[0].sec = a[0] + b[0];
 
-	if ((aOnes % 2) == (bOnes % 2)) {
-		cout << "Tie" << nl;
-		return;
-	}
+	ll ans = max(dp[0].fir, dp[0].sec);
+	FOR (i, 1, n) {
+		ckmax(dp[i].fir, a[i]);
+		ckmax(dp[i].fir, dp[i-1].fir + a[i]);
 
-	FORd(i, n, 0) {
-		if (a[i] != b[i]) {
-			if ((i + 1) % 2 != 0) cout << "Ajisai" << nl;
-			else cout << "Mai" << nl;
-			return;
+		if (k%2) {
+			ckmax(dp[i].sec, a[i] + b[i]);
+			ckmax(dp[i].sec, dp[i-1].fir + a[i] + b[i]);
+			ckmax(dp[i].sec, dp[i-1].sec + a[i]);
 		}
+
+		ckmax(ans, dp[i].fir);
+		ckmax(ans, dp[i].sec);
 	}
+
+	// dbg(dp);
+
+	cout << ans << nl;
 }
  
 int main() {

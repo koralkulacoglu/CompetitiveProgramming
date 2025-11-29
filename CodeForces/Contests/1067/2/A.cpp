@@ -5,6 +5,7 @@ LANG: C++
 */
 
 #pragma GCC optimize ("O3")
+#pragma GCC target ("sse4")
  
 #include <bits/stdc++.h>
  
@@ -96,29 +97,14 @@ struct custom_hash {
 const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
-
-// the person that has the last switch wins or ties
  
 void solve() {
 	int n; cin >> n;
-	vi a(n); FOR (i, 0, n) cin >> a[i];
-	vi b(n); FOR (i, 0, n) cin >> b[i];
+	int y, r; cin >> y >> r;
 
-	int aOnes = accumulate(all(a), 0);
-	int bOnes = accumulate(all(b), 0);
+	int ans = min(n, y/2 + r);
 
-	if ((aOnes % 2) == (bOnes % 2)) {
-		cout << "Tie" << nl;
-		return;
-	}
-
-	FORd(i, n, 0) {
-		if (a[i] != b[i]) {
-			if ((i + 1) % 2 != 0) cout << "Ajisai" << nl;
-			else cout << "Mai" << nl;
-			return;
-		}
-	}
+	cout << ans << nl;
 }
  
 int main() {

@@ -5,6 +5,7 @@ LANG: C++
 */
 
 #pragma GCC optimize ("O3")
+#pragma GCC target ("sse4")
  
 #include <bits/stdc++.h>
  
@@ -97,28 +98,27 @@ const int MOD = 1000000007;
 const char nl = '\n';
 const int MX = 100001; 
 
-// the person that has the last switch wins or ties
- 
 void solve() {
 	int n; cin >> n;
-	vi a(n); FOR (i, 0, n) cin >> a[i];
-	vi b(n); FOR (i, 0, n) cin >> b[i];
-
-	int aOnes = accumulate(all(a), 0);
-	int bOnes = accumulate(all(b), 0);
-
-	if ((aOnes % 2) == (bOnes % 2)) {
-		cout << "Tie" << nl;
-		return;
+	unordered_map<int, int> freq;
+	FOR (i, 0, 2*n) {
+		int x; cin >> x;
+		freq[x]++;
 	}
 
-	FORd(i, n, 0) {
-		if (a[i] != b[i]) {
-			if ((i + 1) % 2 != 0) cout << "Ajisai" << nl;
-			else cout << "Mai" << nl;
-			return;
-		}
+	int odd=0, even=0;
+	trav (i, freq) {
+		if (i.sec % 2 == 1) odd++;
+		else even++;
 	}
+
+	int ans = odd + 2*even;
+
+	if (odd == 0) {
+		if (even % 2 != n%2) ans -= 2;
+	}
+
+	cout << ans << nl;
 }
  
 int main() {
