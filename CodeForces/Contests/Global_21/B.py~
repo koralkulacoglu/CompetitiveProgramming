@@ -1,8 +1,0 @@
-res = []
-for t in range(int(input())):
-    n = int(input())
-    a = input().replace('0', ' ')
-    print(a)
-    res.append(str(len(a)))
-
-print('\n'.join(res))

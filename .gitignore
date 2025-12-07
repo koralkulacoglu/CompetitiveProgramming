@@ -1,0 +1,9 @@
+# Vim backup and swap files
+*~
+*.un~
+.*.swp
+.*.swo
+
+# Python
+__pycache__/
+*.py[cod]
