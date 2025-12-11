@@ -7,3 +7,9 @@
 # Python
 __pycache__/
 *.py[cod]
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env
