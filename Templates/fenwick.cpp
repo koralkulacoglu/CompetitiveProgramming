@@ -10,12 +10,14 @@ struct BIT {
         n = size;
         bit.assign(n, 0);
     }
+
     void update(int ind, T val) {
         while (ind < n) {
             bit[ind] += val;
             ind |= (ind + 1);
         }
     }
+
     T query(int r) {
         T ret = 0;
         while (r >= 0) {
@@ -24,8 +26,10 @@ struct BIT {
         }
         return ret;
     }
+
     T query(int l, int r) {
         if (l <= 0) return query(r);
         return query(r) - query(l - 1);
     }
 };
+
