@@ -2,14 +2,21 @@ class Solution {
 public:
     int trap(vector<int>& height) {
         int n = height.size();
-        if (n <= 2) return 0;
-        vector<int> lMax(n, 0), rMax(n, 0);
-        lMax[0] = height[0];
-        for (int i=1; i<n; i++) lMax[i] = max(lMax[i-1], height[i]);
-        rMax[n-1] = height[n-1];
-        for (int i=n-2; i>=0; i--) rMax[i] = max(rMax[i+1], height[i]);
         int ans = 0;
-        for (int i=1; i<n-1; i++) ans += max(0, min(lMax[i], rMax[i]) - height[i]);
+        stack<int> barIdxs;
+        for (int i=0; i<n; i++) {
+            while (!barIdxs.empty() && height[i] > height[barIdxs.top()]) {
+                int topIdx = barIdxs.top(); barIdxs.pop();
+                if (barIdxs.empty()) break;
+                
+                int leftIdx = barIdxs.top();
+                int totalWidth = i - leftIdx - 1;
+
+                int totalHeight = min(height[i], height[leftIdx]) - height[topIdx];
+                ans += totalHeight * totalWidth;
+            }
+            barIdxs.push(i);
+        }
         return ans;
     }
 };
