@@ -1,20 +1,14 @@
 class Solution {
 public:
     vector<int> findErrorNums(vector<int>& nums) {
-        set<int> xd(nums.begin(), nums.end());
-        vector<int> lmao(xd.begin(), xd.end());
-        int lolol=0;
-        map<int, int> seen;
-        for (int i : nums) {
-            seen[i]++;
-            if (seen[i] == 2) lolol = i;
-        }
-        int prev = 0;
-        int n = lmao.size();
+        int n = nums.size();
+        vector<int> freq(n);
+        for (int i : nums) freq[i-1]++;
+        vector<int> res(2);
         for (int i=0; i<n; i++) {
-            if (lmao[i] != prev+1) return {lolol, prev+1};
-            prev++;
+            if (freq[i] == 2) res[0] = i+1;
+            if (freq[i] == 0) res[1] = i+1; 
         }
-        return {lolol, prev+1};
+        return res;
     }
 };
