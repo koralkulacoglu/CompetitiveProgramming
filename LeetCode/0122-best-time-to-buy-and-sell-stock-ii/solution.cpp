@@ -1,9 +1,14 @@
 class Solution {
 public:
-    // this isn't even dp lol
-    int maxProfit(vector<int>& a) {
-        int n=a.size(), ans=0;
-        for (int i=0; i<n-1; i++) ans += (a[i+1]>a[i]?a[i+1]-a[i]:0);
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+
+        int ans = 0;
+        for (int i=1; i<n; i++) {
+            int profit = prices[i] - prices[i-1];
+            if (profit > 0) ans += profit;
+        }
+
         return ans;
     }
 };
