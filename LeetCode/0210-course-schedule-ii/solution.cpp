@@ -2,41 +2,37 @@ class Solution {
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
         vector<vector<int>> adj(numCourses);
-        vector<int> inDegree(numCourses, 0);
-        vector<int> result;
+        vector<int> indegree(numCourses, 0);
         
-        // Build adjacency list and in-degree count
-        for (const auto& prereq : prerequisites) {
-            int course = prereq[0];
-            int prereqCourse = prereq[1];
-            adj[prereqCourse].push_back(course);
-            inDegree[course]++;
+        for (vector<int>& prereq : prerequisites) {
+            adj[prereq[1]].push_back(prereq[0]);
+            indegree[prereq[0]]++;
         }
+
+        queue<int> que;
+        vector<int> res;
         
-        // Initialize queue with courses having zero prerequisites
-        queue<int> q;
-        for (int i = 0; i < numCourses; ++i) {
-            if (inDegree[i] == 0) {
-                q.push(i);
+        for (int i=0; i<numCourses; i++) {
+            if (indegree[i] == 0) {
+                que.push(i);
             }
         }
-        
-        // Process the courses in topological order
-        while (!q.empty()) {
-            int course = q.front();
-            q.pop();
-            result.push_back(course);
-            
-            for (int neighbor : adj[course]) {
-                inDegree[neighbor]--;
-                if (inDegree[neighbor] == 0) {
-                    q.push(neighbor);
+
+        while (!que.empty()) {
+            int course = que.front();
+            que.pop();
+            res.push_back(course);
+
+            for (int neigh : adj[course]) {
+                indegree[neigh]--;
+                if (indegree[neigh] == 0) {
+                    que.push(neigh);
                 }
             }
         }
-        
-        // If result size is less than numCourses, there was a cycle
-        if (result.size() != numCourses) return {};
-        return result;
+
+        if (res.size() != numCourses) return {};
+        return res;
     }
 };
+
