@@ -1,16 +1,25 @@
 class Solution {
 public:
     int countCollisions(string d) {
-        int n=d.size(), ans=n, l=0, r=0, s=0;
-        for (auto &i : d) s += (i=='S');
-        for (int i=0; i<n; i++) {
-            if (d[i] != 'L') break;
-            l++;
+        int ans = 0;
+        int rights = 0;
+        bool any = false;
+        for (char c : d) {
+            if (c == 'R') {
+                rights++;
+                any = true;
+            }
+            else if (c == 'L') {
+                if (rights) ans += rights + 1;
+                else if (any) ans++;
+                rights = 0;
+            }
+            else {
+                ans += rights;
+                rights = 0;
+                any = true;
+            }
         }
-        for (int i=n-1; i>=0; i--) {
-            if (d[i] != 'R') break;
-            r++;
-        }
-        return ans - l - r - s;
+        return ans;
     }
 };
