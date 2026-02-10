@@ -1,30 +1,18 @@
 class Solution {
 public:
     int countHillValley(vector<int>& nums) {
-        int ans=0;
-        int n=nums.size();
-        int p1=nums[0], p2=0, p3=0, idx=0;
-        for (int i=0; i<n; i++) {
-            if (nums[i] != p1 && !p2) p2 = nums[i];
-            else if (nums[i] != p2 && p2 && !p3) p3 = nums[i];
-            
-            if (p1 && p2 && p3) break;
-            idx++;
+        vector<int> vals;
+        for (int i : nums) {
+            if (vals.empty() || i != vals[vals.size()-1]) vals.push_back(i);
         }
-        if (!p3) return ans;
+
+        int ans = 0;
+        int n = vals.size();
+        for (int i=1; i<n-1; i++) {
+            if (vals[i] >= vals[i-1] && vals[i] >= vals[i+1]) ans++;
+            if (vals[i] <= vals[i-1] && vals[i] <= vals[i+1]) ans++;
+        }
         
-        ans += (p1<p2 && p3<p2) || (p1>p2 && p3>p2);
-        for (int i=idx+1; i<n; i++) {
-            if (nums[i] != p3) {
-                p1 = p2;
-                p2 = p3;
-                p3 = nums[i];
-                
-                if ((p1<p2 && p3<p2) || (p1>p2 && p3>p2)) {
-                    ans++;
-                }
-            }
-        }
         return ans;
     }
 };
