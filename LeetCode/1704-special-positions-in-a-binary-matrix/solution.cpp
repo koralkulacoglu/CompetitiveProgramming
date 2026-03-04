@@ -3,23 +3,22 @@ public:
     int numSpecial(vector<vector<int>>& mat) {
         int n = mat.size();
         int m = mat[0].size();
+        vector<int> row(n, 0), col(m, 0);
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                row[i] += mat[i][j];
+                col[j] += mat[i][j];
+            }
+        }
+
         int ans = 0;
         for (int i=0; i<n; i++) {
             for (int j=0; j<m; j++) {
-                if (mat[i][j]) {
-                    bool wk = true;
-                    for (int k=0; k<n; k++) {
-                        if (k == i) continue;
-                        if (mat[k][j]) wk = false;
-                    }
-                    for (int k=0; k<m; k++) {
-                        if (k == j) continue;
-                        if (mat[i][k]) wk = false;
-                    }
-                    ans += wk;
-                }
+                if (!mat[i][j]) continue;
+                ans += (row[i] == 1 && col[j] == 1);
             }
         }
+
         return ans;
     }
 };
