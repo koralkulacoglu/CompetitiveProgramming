@@ -1,3 +1,3 @@
 class Solution:
     def bitwiseComplement(self, n: int) -> int:
-        return int(''.join(['0' if i=='1' else '1' for i in bin(n)[2:]]), 2)
+        return int(bin(n)[2:].replace('1', 'x').replace('0', '1').replace('x', '0'), 2)
