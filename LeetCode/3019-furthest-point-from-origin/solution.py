@@ -1,7 +1,3 @@
 class Solution:
     def furthestDistanceFromOrigin(self, moves: str) -> int:
-        left = moves.count('L')
-        right = moves.count('R')        
-        free = moves.count('_')        
-        
-        return max(left+free-right, right+free-left)
+        return max(len(moves) - 2*moves.count('L'), len(moves) - 2*moves.count('R'))
