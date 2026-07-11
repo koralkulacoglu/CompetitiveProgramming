@@ -1,56 +1,90 @@
 class Solution {
-    int MOD = 1e9 + 7;
+    static constexpr int MOD{(int)1e9 + 7};
+
+    struct Order {
+        int price;
+        int amount;
+        bool isSell;
+
+        Order(int price, int amount, bool isSell) : price(price), amount(amount), isSell(isSell) {}
+
+        bool operator<(const Order& other) const {
+            if (isSell) return price > other.price;
+            return price < other.price;
+        }
+
+        bool isMatch(Order& other) {
+            if (isSell == other.isSell) return false;
+            if (isSell && price <= other.price) return true;
+            if (!isSell && price >= other.price) return true;
+            return false;
+        }
+
+        void match(Order& other) {
+            int matchAmount = min(amount, other.amount);
+
+            amount -= matchAmount;
+            other.amount -= matchAmount;
+
+            /*
+            cout << "Taker: " << "price = " << price << ", amount = " << amount << ", isSell = " << int(isSell) << endl;
+            cout << "Maker: " << "price = " << other.price << ", amount = " << other.amount << ", isSell = " << int(other.isSell) << endl;
+            cout << endl;
+            */
+        }
+    };
+
 public:
     int getNumberOfBacklogOrders(vector<vector<int>>& orders) {
-        priority_queue<pair<int, int>> buys;
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> sells;
+        priority_queue<Order> buys, sells;
 
-        for (vector<int>& order : orders) {
-            int price = order[0];
-            int amount = order[1];
-            int orderType = order[2];
+        for (auto& o : orders) {
+            Order order(o[0], o[1], o[2]);
 
-            if (orderType == 0) buys.push({price, amount});
-            else sells.push({price, amount});
+            auto& book = (order.isSell ? buys : sells);
 
-            while (!buys.empty() && !sells.empty()) {
-                auto bestBuy = buys.top();
-                int buyPrice = bestBuy.first;
-                int buyAmount = bestBuy.second;
+            while (!book.empty()) {
+                Order best = book.top();
 
-                auto bestSell = sells.top();
-                int sellPrice = bestSell.first;
-                int sellAmount = bestSell.second;
+                if (order.isMatch(best)) {
+                    book.pop();
+                    order.match(best);
+                    
+                    if (best.amount > 0) {
+                        book.push(best);
+                    }
+                    if (order.amount == 0) {
+                        break;
+                    }
+                }
+                else break;
+            }
 
-                if (buyPrice < sellPrice) break;
+            auto& insertBook = (order.isSell ? sells : buys);
 
-                buys.pop();
-                sells.pop();
-
-                int amount = min(buyAmount, sellAmount);
-                buyAmount -= amount;
-                sellAmount -= amount;
-
-                if (buyAmount > 0) buys.push({buyPrice, buyAmount});
-                if (sellAmount > 0) sells.push({sellPrice, sellAmount});
+            // insert order if not empty;
+            if (order.amount > 0) {
+                insertBook.push(order);
             }
         }
 
         int ans = 0;
+
         while (!buys.empty()) {
-            int amount = buys.top().second;
+            Order o = buys.top();
             buys.pop();
-            ans += amount;
+            ans += o.amount;
             ans %= MOD;
         }
 
         while (!sells.empty()) {
-            int amount = sells.top().second;
+            Order o = sells.top();
             sells.pop();
-            ans += amount;
+            ans += o.amount;
             ans %= MOD;
         }
 
         return ans;
     }
 };
+
