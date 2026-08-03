@@ -129,23 +129,38 @@ void solve() {
   int n = accumulate(all(r), 0);
   int m = accumulate(all(c), 0);
 
-  vector<vi> matrix(n, vi(m));
-  int idx = 0;
+  vi rowVal(n);
+  int row = 0;
   FOR(num, 1, k + 1) {
     int cnt = r[num - 1];
-
     FOR(i, 0, cnt) {
-      FOR(j, 0, m) matrix[idx][j] = num;
-      idx++;
+      rowVal[row] = num;
+      row++;
     }
   }
 
-  idx = 0;
+  vi colVal(m);
+  int col = 0;
   FOR(num, 1, k + 1) {
     int cnt = c[num - 1];
-
-    FOR(i, 0, cnt) {}
+    FOR(i, 0, cnt) {
+      colVal[col] = num;
+      col++;
+    }
   }
+
+  cout << "YES" << nl;
+  FOR(i, 0, n) {
+    FOR(j, 0, m) {
+      if ((i + j) & 1) {
+        cout << colVal[j] << ' ';
+      } else {
+        cout << rowVal[i] << ' ';
+      }
+    }
+    cout << nl;
+  }
+  cout << nl;
 }
 
 int main() {
